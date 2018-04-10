@@ -1,15 +1,23 @@
 var express = require('express'),
-	app = express(),
-	port = process.envPORT ||  3000;
+    app = express(),
+    port = process.env.PORT || 3000,
+    bodyParser = require('body-parser');
+    
+
+var todoRoutes = require('./routes/todos');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.get('/', function(req,res){
-	res.send("Hi it works");
-})
+	res.send("Hello from the route");
+});
 
-app.get('/happy', function(req,res){
-	res.send("this also it works");
-})
+
+
+
+app.use('/api/todos', todoRoutes);
 
 app.listen(port, function(){
-	console.log("App is running on PORT 3000")
+    console.log("APP IS RUNNING ON PORT " + process.env.PORT);
 })
