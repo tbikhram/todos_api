@@ -12,7 +12,7 @@ $(document).ready(function(){
 	}); 
 //this is for the click on the X fromt the <span> to delete the item in the list 
 	$('.list').on('click', 'span', function(){
-		console.log("clickecd")
+		removeTodo($(this).parent());
 	})
 });
 
@@ -42,7 +42,10 @@ function addTodos(todos){
 
 
 function addTodo(todo){
+	
 	var newTodo = $('<li class="task">' + todo.name + ' <span>X</span> </li>');
+	// lineked to the delete
+	newTodo.data('id', todo._id);
 	  // if item on list is completed this will create the completed slash
 	  if(todo.completed){
 	  	// this is the class that the done sytling in linked to 
@@ -70,5 +73,26 @@ function createTodo(){
 	.catch(function(err){
 		console.log(err)
 	})
+}
+
+
+function removeTodo(todo){
+		var clickedId = todo.data('id');
+		var deleteUrl = 'api/todos/' + clickedId;
+
+		// this will only remove the content but when page is reloaded it will have the content 
+		// that was created origninally 
+
+		// $(this).parent().remove();
+		$.ajax({
+			method: "DELETE",
+			url: deleteUrl
+		})
+		.then(function(data){
+			todo.remove();
+		});
+		.catch(function(err){
+			console.log(err)
+		})
 }
 
